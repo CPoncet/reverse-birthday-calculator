@@ -1,3 +1,5 @@
+#![windows_subsystem = "windows"]
+
 use eframe::{App, egui};
 use reverse_birthday_calculator::{AgeInput, calc_birthday};
 
