@@ -22,9 +22,9 @@ impl Default for AppData {
     fn default() -> Self {
         Self {
             age: AgeInput {
-                years: "27".to_string(),
-                months: "4".to_string(),
-                days: "12".to_string()
+                years: String::new(),
+                months: String::new(),
+                days: String::new()
             },
             date: String::new(),
             result: String::new()
