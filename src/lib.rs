@@ -27,7 +27,7 @@ pub fn calc_birthday(age: &AgeInput, date: &String) -> Date<Utc> {
 
     let mut num_leap = 0;
 
-    let mut list_of_years: Vec<i32> = (year .. formatted_date.year()).collect();
+    let list_of_years: Vec<i32> = (year .. formatted_date.year()).collect();
 
     for single_year in list_of_years {
         match is_leap_year(single_year) {

@@ -5,13 +5,7 @@ edition = "2021"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
-[features]
-default = []
-
-chrono = ["egui_extras/datepicker"]
-
 [dependencies]
-chrono = { version = "0.4", features = ["js-sys", "wasmbind"] }
+chrono = "0.4"
 eframe = "0.18"
-egui_extras = { version = "0.18.0", features = ["chrono"] }
 

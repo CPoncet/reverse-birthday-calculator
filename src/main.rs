@@ -1,7 +1,5 @@
-use chrono::{Date, Utc};
 use eframe::{App, egui};
 use reverse_birthday_calculator::{AgeInput, calc_birthday};
-use egui_extras::DatePickerButton;
 
 fn main() {
     let options = eframe::NativeOptions::default();
