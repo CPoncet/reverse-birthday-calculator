@@ -9,7 +9,7 @@ pub struct AgeInput {
     pub days: String
 }
 
-pub fn calc_birthday(age: &AgeInput, date: &String) -> Date<Utc> {
+pub fn calc_birthday(age: &AgeInput, date: &String, leap: &bool) -> Date<Utc> {
 
     let splitted_date: Vec<&str> = date.split('/').collect::<Vec<&str>>();
     let date_year = splitted_date[0].parse().unwrap();
@@ -25,34 +25,39 @@ pub fn calc_birthday(age: &AgeInput, date: &String) -> Date<Utc> {
     let year = formatted_date.year() - age_years;
     let month = substract_month(formatted_date.month(), age_months);
 
-    let mut num_leap = 0;
+    let new_date_without_days = Utc.ymd(year + month.1, month.0, formatted_date.day());
 
-    let list_of_years: Vec<i32> = (year .. formatted_date.year()).collect();
+    if *leap {
+        let mut num_leap = 0;
 
-    for single_year in list_of_years {
-        match is_leap_year(single_year) {
-            true => num_leap = num_leap + 1,
-            false => ()
+        let list_of_years: Vec<i32> = (year .. formatted_date.year()).collect();
+
+        for single_year in list_of_years {
+            match is_leap_year(single_year) {
+                true => num_leap = num_leap + 1,
+                false => ()
+            }
         }
+
+        new_date_without_days - Duration::days(age_days + num_leap)
+    } else {
+        new_date_without_days - Duration::days(age_days)
     }
 
-    let new_date_without_days = Utc.ymd(year, month, formatted_date.day());
-
-    new_date_without_days - Duration::days(age_days + num_leap)
 }
 
 fn is_leap_year(year: i32) -> bool {
     return year % 4 == 0 && (year % 100 != 0 || year % 400 == 0)
 }
 
-fn substract_month(date_month: u32, age_months: u32) -> u32 {
+fn substract_month(date_month: u32, age_months: u32) -> (u32, i32) {
     match date_month.cmp(&age_months) {
         Ordering::Less => {
             let remainder = age_months - date_month;
-            12 - remainder
+            (12 - remainder, - 1)
         },
-        Ordering::Equal => 12,
-        Ordering::Greater => date_month - age_months
+        Ordering::Equal => (12, 0),
+        Ordering::Greater => (date_month - age_months, 0)
     }
 }
 
@@ -70,6 +75,6 @@ mod tests {
 
         let date = String::from("1839/7/30");
 
-        assert_eq!(calc_birthday(&age, &date), Utc.ymd(1812, 3, 11))
+        assert_eq!(calc_birthday(&age, &date, &false), Utc.ymd(1812, 3, 18))
     }
 }

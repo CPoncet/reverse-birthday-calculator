@@ -15,6 +15,7 @@ fn main() {
 struct AppData {
     age: AgeInput,
     date: String,
+    leap: bool,
     result: String
 }
 
@@ -26,6 +27,7 @@ impl Default for AppData {
                 months: String::new(),
                 days: String::new()
             },
+            leap: true,
             date: String::new(),
             result: String::new()
         }
@@ -60,9 +62,12 @@ impl App for AppData {
                 ui.text_edit_singleline(&mut self.age.days);
             });
 
+            ui.horizontal(|ui| {
+                ui.checkbox(&mut self.leap, "Include leap years");
+            });
 
             if ui.button("Ok").clicked() {
-                self.result = calc_birthday(&self.age, &self.date).to_string()
+                self.result = calc_birthday(&self.age, &self.date, &self.leap).to_string()
             }
 
             ui.label(format!("Date '{}'", self.result));
