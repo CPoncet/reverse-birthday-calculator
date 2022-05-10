@@ -1,12 +1,12 @@
 #![windows_subsystem = "windows"]
 
 use eframe::{App, egui};
-use reverse_birthday_calculator::{AgeInput, calc_birthday};
+use reverse_date_calculator::{AgeInput, calc_birthday};
 
 fn main() {
     let options = eframe::NativeOptions::default();
     eframe::run_native(
-        "Reverse birthday calculator",
+        "Reverse date calculator",
         options,
         Box::new(|_cc| Box::new(AppData::default()))
     )
@@ -37,7 +37,7 @@ impl Default for AppData {
 impl App for AppData {
     fn update(&mut self, ctx: &egui::Context, _frame: &mut eframe::Frame) {
         egui::CentralPanel::default().show(ctx, |ui| {
-            ui.heading("Reverse birthday calculator");
+            ui.heading("Reverse date calculator");
             ui.horizontal(|ui| {
                 ui.heading("Date: ");
 
@@ -63,7 +63,7 @@ impl App for AppData {
             });
 
             ui.horizontal(|ui| {
-                ui.checkbox(&mut self.leap, "Include leap years");
+                ui.checkbox(&mut self.leap, "Exclude leap years");
             });
 
             if ui.button("Ok").clicked() {
