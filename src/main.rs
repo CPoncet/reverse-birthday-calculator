@@ -1,14 +1,14 @@
 #![windows_subsystem = "windows"]
 
-use eframe::{App, egui};
-use reverse_date_calculator::{AgeInput, calc_birthday};
+use eframe::{egui, App};
+use reverse_date_calculator::{calc_birthday, AgeInput};
 
 fn main() {
     let options = eframe::NativeOptions::default();
     eframe::run_native(
         "Reverse date calculator",
         options,
-        Box::new(|_cc| Box::new(AppData::default()))
+        Box::new(|_cc| Box::new(AppData::default())),
     )
 }
 
@@ -16,7 +16,7 @@ struct AppData {
     age: AgeInput,
     date: String,
     leap: bool,
-    result: String
+    result: String,
 }
 
 impl Default for AppData {
@@ -25,11 +25,11 @@ impl Default for AppData {
             age: AgeInput {
                 years: String::new(),
                 months: String::new(),
-                days: String::new()
+                days: String::new(),
             },
             leap: true,
             date: String::new(),
-            result: String::new()
+            result: String::new(),
         }
     }
 }
@@ -67,7 +67,10 @@ impl App for AppData {
             });
 
             if ui.button("Ok").clicked() {
-                self.result = calc_birthday(&self.age, &self.date, &self.leap).to_string()
+                self.result = match calc_birthday(&self.age, &self.date, &self.leap) {
+                    Ok(date) => date.to_string(),
+                    Err(err) => err,
+                }
             }
 
             ui.label(format!("Date '{}'", self.result));
